@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Student Bus Page</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        /* MENU ICON */
+        .menu-icon {
+            font-size: 28px;
+            cursor: pointer;
+            padding: 15px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1001;
+            background: #2c3e50;
+            color: white;
+        }
+
+        /* SIDEBAR */
+        .sidebar {
+            width: 220px;
+            height: 100vh;
+            background: #2c3e50;
+            color: white;
+            position: fixed;
+            top: 0;
+            left: -220px;
+            padding-top: 60px;
+            transition: 0.3s;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .menu-items a {
+            display: block;
+            padding: 12px;
+            color: white;
+            text-decoration: none;
+        }
+
+        .menu-items a:hover {
+            background: #34495e;
+        }
+
+        /* LOGOUT */
+        .logout {
+            padding: 12px;
+            background: #c0392b;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .logout:hover {
+            background: #e74c3c;
+        }
+
+        /* MAIN CONTENT */
+        .main {
+            padding: 20px;
+            margin-top: 60px;
+            padding-left: 20%;
+        }
+
+        input {
+            padding: 8px;
+            width: 200px;
+        }
+
+        button {
+            padding: 8px 12px;
+            margin-left: 5px;
+            cursor: pointer;
+        }
+
+        iframe {
+            width: 100%;
+            height: 350px;
+            border: 1px solid #ccc;
+            margin-top: 15px;
+        }
+
+        /* SEAT LAYOUT */
+        .seat-container {
+            margin-top: 20px;
+            display: none;
+        }
+
+        .seats {
+            display: grid;
+            grid-template-columns: repeat(2, 50px) 40px repeat(2, 50px);
+            gap: 10px;
+        }
+
+        .seat {
+            width: 45px;
+            height: 45px;
+            border: 1px solid black;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #ecf0f1;
+            font-size: 12px;
+        }
+        .logout{
+            margin-bottom: 50%;
+        }
+    </style>
+</head>
+<body>
+
+
+<div class="menu-icon" onclick="toggleMenu()">☰</div>
+<div class="sidebar" id="sidebar">
+
+    <div class="menu-items">
+        <h3 style="text-align:center;">Menu</h3>
+        <a href="http://160.187.169.12/student/">Student Details</a>
+        <a href="#">Faculty</a>
+        <a href="#">Driver</a>
+      
+    </div>
+
+
+    <div class="logout" onclick="logout()">Logout</div>
+
+</div>
+
+
+<div class="main">
+    <h2>Bus Tracking</h2>
+
+    
+    <input type="text" id="busNo" placeholder="Enter Bus Number">
+    <button onclick="searchBus()">Search</button>
+
+    <br><br>
+
+    
+    <button onclick="payFee()">Fee Pay</button>
+    <button onclick="showSeats()">Seat Capacity</button>
+
+    
+    <iframe id="tracker"></iframe>
+
+
+    <div class="seat-container" id="seatContainer">
+        <h3>Total Seats: 74</h3>
+        <div class="seats" id="seats"></div>
+    </div>
+</div>
+
+<script>
+    function toggleMenu() {
+        let sidebar = document.getElementById("sidebar");
+        sidebar.style.left = (sidebar.style.left === "0px") ? "-220px" : "0px";
+    }
+
+    function searchBus() {
+        let busNumber = document.getElementById("busNo").value;
+        if (busNumber === "") {
+            alert("Enter bus number");
+            return;
+        }
+
+        let url = "https://web.dhundhoo.com/live_singletrack?apiKey=2c76dd10-74d1-4798-bded-7b80ea1ecc6f&thingId=";
+        document.getElementById("tracker").src = url + busNumber;
+    }
+
+    function payFee() {
+        alert("Redirecting to Fee Payment");
+    }
+
+    function showSeats() {
+        const seatBox = document.getElementById("seatContainer");
+        const seatsDiv = document.getElementById("seats");
+
+        seatBox.style.display = "block";
+        seatsDiv.innerHTML = "";
+
+        for (let i = 1; i <= 74; i++) {
+            let seat = document.createElement("div");
+            seat.className = "seat";
+            seat.innerText = i;
+            seatsDiv.appendChild(seat);
+        }
+    }
+
+    function logout() {
+        window.location.href = "loginpage.html";
+    }
+</script>
+
+</body>
+</html>

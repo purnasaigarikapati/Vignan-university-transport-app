@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Driver Dashboard</title>
+
+<style>
+    body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background: #e6f0ff;
+        background-image: url(./5.png);
+        background-size: cover;
+        background-repeat: no-repeat;
+    }
+
+    .header {
+        height: 50px;
+        background: #123d8c;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 20px;
+        font-weight: bold;
+    }
+
+    .container {
+        padding: 20px;
+    }
+
+    textarea {
+        width: 99%;
+        resize: none;
+        padding: 10px;
+        font-family: monospace;
+    }
+
+    .section {
+        margin-bottom: 15px;
+    }
+
+    .search-row {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        margin-top: 10px;
+    }
+
+    input {
+        padding: 6px;
+        width: 140px;
+    }
+
+    button {
+        padding: 6px 12px;
+        border: none;
+        cursor: pointer;
+        color: white;
+        border-radius: 4px;
+    }
+
+    .search-btn { background: #ff7900; }
+    .tracker-btn { background: #123d8c; }
+
+    fieldset {
+        border: 1px solid #aaa;
+        padding: 10px;
+    }
+
+    legend {
+        font-weight: bold;
+    }
+</style>
+</head>
+
+<body>
+
+<div class="header">Driver Dashboard</div>
+
+<div class="container">
+
+    <!-- DRIVER DETAILS -->
+    <fieldset class="section">
+        <legend>Driver Details</legend>
+        <textarea id="driverInfo" rows="7" readonly></textarea>
+    </fieldset>
+
+    <!-- SEARCH BUS -->
+    <div class="search-row">
+        <label><b>Search Bus No:</b></label>
+        <input type="text" id="busSearch">
+        <button class="search-btn" onclick="searchBus()">Search</button>
+        <button class="tracker-btn" onclick="openTracker()">Open Tracker</button>
+    </div>
+
+    <!-- BUS DETAILS -->
+    <fieldset class="section">
+        <legend>Bus Details</legend>
+        <textarea id="busDetails" rows="6" readonly></textarea>
+    </fieldset>
+
+    <!-- TIMETABLE -->
+    <fieldset class="section">
+        <legend>Bus Trip Timetable</legend>
+        <textarea id="timetable" rows="8" readonly></textarea>
+    </fieldset>
+
+</div>
+
+<script>
+    // -------- SAMPLE DATA (Simulating DB) ----------
+    const drivers = [
+        {
+            driver_name: "Ramesh",
+            driver_id: "D101",
+            bus_no: "AP39VB4229",
+            salary: 18000,
+            morning_trip: "Campus → City",
+            evening_trip: "City → Campus",
+            trips_per_day: 2,
+            km_per_day: 120
+        },
+        {
+            driver_name: "Suresh",
+            driver_id: "D102",
+            bus_no: "AP39VB4229",
+            salary: 20000,
+            morning_trip: "Campus → Mall",
+            evening_trip: "Mall → Campus",
+            trips_per_day: 2,
+            km_per_day: 150
+        }
+    ];
+
+    const timetable = [
+        { bus_no: "AP39VB4229", trip_time: "7:30 AM", route: "Campus→ guntur" },
+        { bus_no: "AP39VB4228", trip_time: "5:30 PM", route: "City → Campus" },
+        { bus_no: "AP39VB2660", trip_time: "8:00 AM", route: "Campus → chilkularipeta" },
+        { bus_no: "AP39VB2659", trip_time: "6:00 PM", route: "vijawada → Campus" }
+    ];
+
+    // -------- LOAD DRIVER INFO (Default) ----------
+    function loadDriverInfo() {
+        const d = drivers[0]; // simulate logged-in driver
+
+        let txt = "";
+        txt += "Driver Name: " + d.driver_name + "\n";
+        txt += "Driver ID: " + d.driver_id + "\n";
+        txt += "Bus No: " + d.bus_no + "\n";
+        txt += "Monthly Salary: ₹" + d.salary + "\n";
+        txt += "Morning Trip: " + d.morning_trip + "\n";
+        txt += "Evening Trip: " + d.evening_trip + "\n";
+        txt += "Trips Per Day: " + d.trips_per_day + "\n";
+        txt += "KM Per Day: " + d.km_per_day + "\n";
+        txt += "Thumb Impression Today: ✔ Completed\n";
+
+        document.getElementById("driverInfo").value = txt;
+    }
+
+    // -------- SEARCH BUS ----------
+    function searchBus() {
+        const busNo = document.getElementById("busSearch").value.trim().toUpperCase();
+        const area = document.getElementById("busDetails");
+
+        if (busNo === "") {
+            alert("Enter Bus Number!");
+            return;
+        }
+
+        const bus = drivers.find(d => d.bus_no === busNo);
+
+        if (bus) {
+            let txt = "";
+            txt += "Bus No: " + bus.bus_no + "\n";
+            txt += "Driver Name: " + bus.driver_name + "\n";
+            txt += "Driver ID: " + bus.driver_id + "\n";
+            txt += "Seat Capacity: 52\n";
+            txt += "Route: " + bus.morning_trip + " - " + bus.evening_trip + "\n";
+            txt += "Trips Per Day: " + bus.trips_per_day + "\n";
+            txt += "KM Per Day: " + bus.km_per_day + "\n";
+            txt += "\n👉 Click Open Tracker to view Live Tracker";
+
+            area.value = txt;
+
+            // Auto open tracker like Java version
+            openTracker(busNo);
+
+        } else {
+            area.value = "No bus found with Bus No: " + busNo;
+        }
+    }
+
+    // -------- OPEN TRACKER ----------
+    function openTracker(busNoParam) {
+        let busNo = busNoParam || document.getElementById("busSearch").value.trim().toUpperCase();
+
+        if (busNo === "") {
+            alert("Enter Bus Number to track!");
+            return;
+        }
+
+        const url =
+            "https://web.dhundhoo.com/live_singletrack?apiKey=2c76dd10-74d1-4798-bded-7b80ea1ecc6f&thingId=" + busNo;
+
+        window.open(url, "_blank");
+    }
+
+    // -------- LOAD TIMETABLE ----------
+    function loadTimetable() {
+        let txt = "";
+        txt += "Bus No       Trip Time  Route\n";
+        txt += "---------------------------------------------\n";
+
+        timetable.forEach(t => {
+            txt += `${t.bus_no.padEnd(12)} ${t.trip_time.padEnd(10)} ${t.route}\n`;
+        });
+
+        document.getElementById("timetable").value = txt;
+    }
+
+    // -------- INIT ----------
+    loadDriverInfo();
+    loadTimetable();
+
+</script>
+
+</body>
+</html>

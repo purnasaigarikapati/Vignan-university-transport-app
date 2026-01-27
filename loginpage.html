@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bus Transport Login</title>
+
+    <style>
+        .container{
+            height: 320px;
+            width: 300px;
+            border: 2px solid black;
+            border-radius: 10px;
+            background-color: white;
+            margin: auto;
+            position: absolute;
+            top: 0; bottom: 0; left: 0; right: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        label{
+            padding-left: 20px;
+        }
+
+        h2{
+            text-align: center;
+        }
+
+        body{
+            background-image: url(./3.png);
+            background-size: cover;
+            background-attachment: fixed;
+        }
+
+        .button{
+            width: 40%;
+            display: block;
+            margin: auto;
+        }
+
+        .button:hover{
+            cursor: pointer;
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+    <form>
+        <h2>BUS TRANSPORT</h2>
+
+        <label>Name:</label>
+        <input type="text" id="name" placeholder="User ID" required><br><br>
+
+        <label>Password:</label>
+        <input type="password" id="password" placeholder="Enter password" required><br><br>
+
+        <label>Select role:</label>
+        <select id="role" required>
+            <option value="">-- Select Role --</option>
+            <option value="Student">Student</option>
+            <option value="Faculty">Faculty</option>
+            <option value="Driver">Driver</option>
+        </select><br><br>
+
+        <button type="button" onclick="login()" class="button">Login</button>
+    </form>
+</div>
+
+<script>
+    function login() {
+        alert("Login successfully");
+
+        let role = document.getElementById("role").value;
+
+        if (role === "Student") {
+            window.location.href = "studentpage.html";
+        }
+        
+
+        else if (role === "Driver") {
+            window.location.href = "driver.html";
+        }else{
+             window.location.href = "faculty.html";
+        }
+    }
+   
+    
+
+      
+    
+</script>
+</script>
+
+</body>
+</html
